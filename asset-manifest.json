@@ -1,0 +1,110 @@
+[
+  {
+    "file": "burst-fade-01.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 646418,
+    "sha256": "24d60b5bdf8f9f98daa2dc7afbf2b5a3fa9f49a2b6aedaf72d29652e4fe76039"
+  },
+  {
+    "file": "burst-fade-02.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 920274,
+    "sha256": "ec5b680a9228274e6b9b946fa720cb44f2b2408f5a9d3f2eadc5ceadfead8038"
+  },
+  {
+    "file": "comb-over-fade-01.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 679544,
+    "sha256": "7cf228111cb8d0e17eda11cc01fd75c5cbf0d471b59acbbc0fe8c9bb468989c7"
+  },
+  {
+    "file": "comb-over-fade-02.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 879982,
+    "sha256": "7a65d3907cbbfb721d2e5eb038a48537ad945b51433d2553c97fab68d82c62e9"
+  },
+  {
+    "file": "curly-top-fade.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 624458,
+    "sha256": "a4e4fe936ba82fe1eb64dc75825cf3400c2051ffe41374f5b44329c022cc59dd"
+  },
+  {
+    "file": "high-skin-fade.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 631258,
+    "sha256": "ed647757ccea88109a6e89b2eaea0bda994417d365b6a32e4aa343a35b84a72f"
+  },
+  {
+    "file": "high-top-fade.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 623460,
+    "sha256": "8ffc935eaf1767be75fb0b1c186663625af21f92f5a74f83cc75e1aa2f7f48ec"
+  },
+  {
+    "file": "low-skin-fade-01.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 614748,
+    "sha256": "354c2bd5601876b5967345eb84faf9bce2a873fefb4c912eb2bce4457fa5c304"
+  },
+  {
+    "file": "low-skin-fade-02.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 1065204,
+    "sha256": "98da3143a01ece329f3b0164c9379d43ea2c7afd045810b207b509e2b89543ba"
+  },
+  {
+    "file": "mid-skin-fade.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 749876,
+    "sha256": "9ee58f93c3e0f716d52c4add8d63221bb4a6afbf6d93d67cdd778e31e3c987c4"
+  },
+  {
+    "file": "shadow-fade-01.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 603844,
+    "sha256": "bdf239a3a83e80d5638207b7adf073cdec52b4f14b57d01b439e011b5966b8ff"
+  },
+  {
+    "file": "shadow-fade-02.webp",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 1018926,
+    "sha256": "9905c61a8fca9e25ccbd86d3bb2b93b6a934d9429bbd65b34e09c7f93ba29862"
+  }
+]
