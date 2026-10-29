@@ -1,199 +1,272 @@
-{
-  "source_pdf": "a_Generate_an_ultra-ph (1).pdf",
-  "unique_pdf_images_added": 24,
-  "deduplication": "Exact duplicates removed and near-identical perceptual hashes (Hamming distance <=2) skipped.",
-  "files": [
-    {
-      "file": "pdf-reference-01.webp",
-      "source_image": "a-000.jpg",
-      "source_dimensions": [
-        1536,
-        1024
-      ]
-    },
-    {
-      "file": "pdf-reference-02.webp",
-      "source_image": "a-001.jpg",
-      "source_dimensions": [
-        2736,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-03.webp",
-      "source_image": "a-002.jpg",
-      "source_dimensions": [
-        1536,
-        1024
-      ]
-    },
-    {
-      "file": "pdf-reference-04.webp",
-      "source_image": "a-003.jpg",
-      "source_dimensions": [
-        2368,
-        1776
-      ]
-    },
-    {
-      "file": "pdf-reference-05.webp",
-      "source_image": "a-004.jpg",
-      "source_dimensions": [
-        1536,
-        1024
-      ]
-    },
-    {
-      "file": "pdf-reference-06.webp",
-      "source_image": "a-006.jpg",
-      "source_dimensions": [
-        1402,
-        1122
-      ]
-    },
-    {
-      "file": "pdf-reference-07.webp",
-      "source_image": "a-007.jpg",
-      "source_dimensions": [
-        2736,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-08.webp",
-      "source_image": "a-008.jpg",
-      "source_dimensions": [
-        1536,
-        1024
-      ]
-    },
-    {
-      "file": "pdf-reference-09.webp",
-      "source_image": "a-009.jpg",
-      "source_dimensions": [
-        2736,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-10.webp",
-      "source_image": "a-012.jpg",
-      "source_dimensions": [
-        1370,
-        1148
-      ]
-    },
-    {
-      "file": "pdf-reference-11.webp",
-      "source_image": "a-013.jpg",
-      "source_dimensions": [
-        2736,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-12.webp",
-      "source_image": "a-014.jpg",
-      "source_dimensions": [
-        1312,
-        1199
-      ]
-    },
-    {
-      "file": "pdf-reference-13.webp",
-      "source_image": "a-015.jpg",
-      "source_dimensions": [
-        2736,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-14.webp",
-      "source_image": "a-017.jpg",
-      "source_dimensions": [
-        896,
-        1200
-      ]
-    },
-    {
-      "file": "pdf-reference-15.webp",
-      "source_image": "a-018.jpg",
-      "source_dimensions": [
-        1024,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-16.webp",
-      "source_image": "a-019.jpg",
-      "source_dimensions": [
-        600,
-        600
-      ]
-    },
-    {
-      "file": "pdf-reference-17.webp",
-      "source_image": "a-020.jpg",
-      "source_dimensions": [
-        1024,
-        1024
-      ]
-    },
-    {
-      "file": "pdf-reference-18.webp",
-      "source_image": "a-021.jpg",
-      "source_dimensions": [
-        600,
-        600
-      ]
-    },
-    {
-      "file": "pdf-reference-19.webp",
-      "source_image": "a-022.jpg",
-      "source_dimensions": [
-        1920,
-        1120
-      ]
-    },
-    {
-      "file": "pdf-reference-20.webp",
-      "source_image": "a-023.jpg",
-      "source_dimensions": [
-        400,
-        400
-      ]
-    },
-    {
-      "file": "pdf-reference-21.webp",
-      "source_image": "a-024.jpg",
-      "source_dimensions": [
-        1024,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-22.webp",
-      "source_image": "a-025.jpg",
-      "source_dimensions": [
-        1024,
-        1536
-      ]
-    },
-    {
-      "file": "pdf-reference-23.webp",
-      "source_image": "a-026.jpg",
-      "source_dimensions": [
-        819,
-        1024
-      ]
-    },
-    {
-      "file": "pdf-reference-24.webp",
-      "source_image": "a-027.jpg",
-      "source_dimensions": [
-        1024,
-        1024
-      ]
-    }
-  ]
-}
+[
+  {
+    "file": "67-man-bun-model-a.webp",
+    "style": "Man Bun",
+    "variant": "Model A",
+    "original": "mai-image-2.6 (t2i)_b_Man_Bun_A._Hairstyle.png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 170000
+  },
+  {
+    "file": "67-man-bun-model-b.webp",
+    "style": "Man Bun",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a_Man_Bun_A._Hairstyle.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 109618
+  },
+  {
+    "file": "66-long-layered-hair-model-a.webp",
+    "style": "Long Layered Hair",
+    "variant": "Model A",
+    "original": "mai-image-2.6 (t2i)_b_Long_Layered_Hair_A..png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 152468
+  },
+  {
+    "file": "66-long-layered-hair-model-b.webp",
+    "style": "Long Layered Hair",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a_Long_Layered_Hair_A..png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 127136
+  },
+  {
+    "file": "65-long-slick-back-model-a.webp",
+    "style": "Long Slick Back",
+    "variant": "Model A",
+    "original": "mai-image-2.6 (t2i)_b___LONG_HAIRSTYLES_65.png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 140640
+  },
+  {
+    "file": "65-long-slick-back-model-b.webp",
+    "style": "Long Slick Back",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a___LONG_HAIRSTYLES_65.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 124008
+  },
+  {
+    "file": "64-brush-up-model-a.webp",
+    "style": "Brush Up",
+    "variant": "Model A",
+    "original": "seedream-5.0-pro_b_Brush_Up_A._Hairstyl.jpeg",
+    "width": 1200,
+    "height": 1500,
+    "bytes": 125188
+  },
+  {
+    "file": "64-brush-up-model-b.webp",
+    "style": "Brush Up",
+    "variant": "Model B",
+    "original": "mai-image-2.6 (t2i)_a_Brush_Up_A._Hairstyl.png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 133682
+  },
+  {
+    "file": "61-bro-flow-model-a.webp",
+    "style": "Bro Flow",
+    "variant": "Model A",
+    "original": "seedream-5.0-pro_b_Bro_Flow_A._Hairstyl.jpeg",
+    "width": 1200,
+    "height": 1500,
+    "bytes": 153806
+  },
+  {
+    "file": "61-bro-flow-model-b.webp",
+    "style": "Bro Flow",
+    "variant": "Model B",
+    "original": "mai-image-2.6 (t2i)_a_Bro_Flow_A._Hairstyl.png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 173130
+  },
+  {
+    "file": "60-curtain-hairstyle-model-a.webp",
+    "style": "Curtain Hairstyle",
+    "variant": "Model A",
+    "original": "mai-image-2.6 (t2i)_a_Curtain_Hairstyle_A..png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 184828
+  },
+  {
+    "file": "60-curtain-hairstyle-model-b.webp",
+    "style": "Curtain Hairstyle",
+    "variant": "Model B",
+    "original": "seedream-5.0-pro_b_Curtain_Hairstyle_A..jpeg",
+    "width": 1200,
+    "height": 1500,
+    "bytes": 116334
+  },
+  {
+    "file": "58-messy-hairstyle-model-a.webp",
+    "style": "Messy Hairstyle",
+    "variant": "Model A",
+    "original": "seedream-5.0-pro_b_Messy_Hairstyle_A._H.jpeg",
+    "width": 1200,
+    "height": 1500,
+    "bytes": 169546
+  },
+  {
+    "file": "58-messy-hairstyle-model-b.webp",
+    "style": "Messy Hairstyle",
+    "variant": "Model B",
+    "original": "mai-image-2.6 (t2i)_a_Messy_Hairstyle_A._H.png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 179484
+  },
+  {
+    "file": "57-mohawk-model-a.webp",
+    "style": "Mohawk",
+    "variant": "Model A",
+    "original": "seedream-5.0-pro_b_Mohawk_A._Hairstyle.jpeg",
+    "width": 1200,
+    "height": 1500,
+    "bytes": 128848
+  },
+  {
+    "file": "57-mohawk-model-b.webp",
+    "style": "Mohawk",
+    "variant": "Model B",
+    "original": "mai-image-2.6 (t2i)_a_Mohawk_A._Hairstyle.png",
+    "width": 1200,
+    "height": 1511,
+    "bytes": 136356
+  },
+  {
+    "file": "56-faux-hawk-model-a.webp",
+    "style": "Faux Hawk",
+    "variant": "Model A",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_Faux_Hawk_A._Hairsty.jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 70606
+  },
+  {
+    "file": "56-faux-hawk-model-b.webp",
+    "style": "Faux Hawk",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a_Faux_Hawk_A._Hairsty.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 152292
+  },
+  {
+    "file": "style-comparison-modern-pompadour-side-part-hard-part-model-a.webp",
+    "style": "Modern Pompadour, Side Part & Hard Part",
+    "variant": "Comparison Board A",
+    "original": "gpt-image-2.5-sunburst_a_•_Barber_reference__ (1).png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 160824
+  },
+  {
+    "file": "style-comparison-modern-pompadour-side-part-hard-part-model-b.webp",
+    "style": "Modern Pompadour, Side Part & Hard Part",
+    "variant": "Comparison Board B",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_•_Barber_reference__ (1).jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 112860
+  },
+  {
+    "file": "style-comparison-modern-pompadour-side-part-hard-part-model-c.webp",
+    "style": "Modern Pompadour, Side Part & Hard Part",
+    "variant": "Comparison Board C",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_•_Barber_reference__.jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 112860
+  },
+  {
+    "file": "style-comparison-modern-pompadour-side-part-hard-part-model-d.webp",
+    "style": "Modern Pompadour, Side Part & Hard Part",
+    "variant": "Comparison Board D",
+    "original": "gpt-image-2.5-sunburst_a_•_Barber_reference__.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 160824
+  },
+  {
+    "file": "48-modern-pompadour-model-a.webp",
+    "style": "Modern Pompadour",
+    "variant": "Model A",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_Modern_Pompadour_A._.jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 90198
+  },
+  {
+    "file": "48-modern-pompadour-model-b.webp",
+    "style": "Modern Pompadour",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a_Modern_Pompadour_A._.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 178952
+  },
+  {
+    "file": "47-classic-quiff-model-a.webp",
+    "style": "Classic Quiff & Pompadour Comparison",
+    "variant": "Comparison A",
+    "original": "gpt-image-2.5-sunburst_a_Classic_Quiff_A._Hai.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 159306
+  },
+  {
+    "file": "47-classic-quiff-model-b.webp",
+    "style": "Classic Quiff & Pompadour Comparison",
+    "variant": "Comparison B",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_Classic_Quiff_A._Hai.jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 101224
+  },
+  {
+    "file": "46-textured-quiff-model-a.webp",
+    "style": "Textured Quiff",
+    "variant": "Model A",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_Textured_Quiff_A._Ha.jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 101490
+  },
+  {
+    "file": "46-textured-quiff-model-b.webp",
+    "style": "Textured Quiff",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a_Textured_Quiff_A._Ha.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 158832
+  },
+  {
+    "file": "45-quiff-model-a.webp",
+    "style": "Quiff",
+    "variant": "Model A",
+    "original": "gemini-3.1-flash-lite-image (nano-banana-2-lite)_b_Quiff_A._Hairstyle_s.jpeg",
+    "width": 928,
+    "height": 1152,
+    "bytes": 69296
+  },
+  {
+    "file": "45-quiff-model-b.webp",
+    "style": "Quiff",
+    "variant": "Model B",
+    "original": "gpt-image-2.5-sunburst_a_Quiff_A._Hairstyle_s.png",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 138710
+  }
+]
