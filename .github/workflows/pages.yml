@@ -20,6 +20,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Extract hairstyle image archives
+        run: |
+          python - <<'PY'
+          from zipfile import ZipFile
+          from pathlib import Path
+          archives = [
+              "curly-wavy-web-project-cleaned (1).zip",
+              "curly-wavy-8-images-cleaned.zip",
+          ]
+          for archive in archives:
+              with ZipFile(archive) as z:
+                  for member in z.namelist():
+                      if member.startswith("images/curly-wavy/") and not member.endswith("/"):
+                          z.extract(member, ".")
+          print("Extracted curated Curly & Wavy image assets.")
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site artifact
