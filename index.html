@@ -6,34 +6,42 @@
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://mtine9086-del.github.io/salon-project-2/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="The Style Menu — Men's Haircut Gallery">
+<meta property="og:title" content="The Style Menu — Men's Grooming Lookbook">
+<meta name="description" content="Explore a curated men's haircut, beard and moustache lookbook. Search styles, compare references and show your preferred look to your barber.">
+<meta property="og:site_name" content="The Style Menu">
+<meta property="og:image" content="https://mtine9086-del.github.io/salon-project-2/curly-top-fade.webp">
 <meta property="og:description" content="Explore men's haircut references, compare styles, and show your preferred look to your barber.">
 <meta property="og:url" content="https://mtine9086-del.github.io/salon-project-2/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Browse a curated men's haircut lookbook with original PDF references, search, categories and a full-screen image viewer.">
-<title>The Style Menu — Men's Haircut Gallery</title>
+
+<title>The Style Menu — Men's Grooming Lookbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
 </head>
 <body>
 <div class="announcement">✦ &nbsp; YOUR NEXT LOOK STARTS HERE</div>
-<header class="site-header">
-<a class="brand" href="#"><span class="brand-mark">S<span>.</span></span><span class="brand-copy"><strong>THE STYLE MENU</strong><small>MEN'S HAIRCUT GALLERY</small></span></a>
+<header class="site-header" id="top">
+<a class="brand" href="#top" aria-label="The Style Menu home"><span class="brand-mark">S<span>.</span></span><span class="brand-copy"><strong>THE STYLE MENU</strong><small>MEN'S GROOMING LOOKBOOK</small></span></a>
 <nav class="main-nav"><a href="#catalogue">Haircuts</a><a href="#beard-catalogue">Beard &amp; moustache</a></nav><a class="header-link" href="#catalogue">Explore styles ↗</a>
 </header>
+<nav class="mobile-section-nav" aria-label="Catalogue sections">
+  <a href="#catalogue">Haircuts <span>↘</span></a>
+  <a href="#beard-catalogue">Beard &amp; moustache <span>↘</span></a>
+</nav>
 <main>
 <section class="hero">
 <div class="hero-copy"><p class="eyebrow">YOUR STYLE. YOUR CHOICE.</p><h1>Find the look.<br><em>Own the look.</em></h1>
-<p class="hero-description">Explore professional haircut reference images. Tap any style to view it larger and swipe through the gallery.</p>
-<a class="primary-button" href="#catalogue">Explore the menu ↓</a><div class="hero-note">✦ &nbsp; Browse styles. Tap a photo. View full screen.</div></div>
-<div class="hero-art"><div class="hero-photo"><img src="curly-top-fade.webp" alt="Curly Top Fade haircut catalogue reference"></div><div class="hero-tag">THE LOOKBOOK <span>HAIR · STYLE · YOU</span></div></div>
+<p class="hero-description">A considered collection of haircut, beard and moustache references. Find a look, inspect the details, then show your barber exactly what you have in mind.</p>
+<div class="hero-actions"><a class="primary-button" href="#catalogue">Explore haircuts <span>↘</span></a><a class="text-link" href="#beard-catalogue">Beard &amp; moustache <span>↗</span></a></div>
+<div class="hero-proof"><span class="proof-mark">✦</span> A practical grooming reference for your next visit</div></div>
+<div class="hero-art"><div class="hero-index">THE EDIT <span>—</span> 01 / GROOMING</div><div class="hero-photo"><img src="curly-top-fade.webp" alt="Curly top fade haircut reference" width="1024" height="1024" fetchpriority="high" decoding="async"></div><div class="hero-stamp"><span>THE</span><strong>STYLE<br>EDIT</strong><small>HAIR · BEARD · YOU</small></div><div class="hero-caption"><span>FEATURED REFERENCE</span><strong>Curly Top Fade</strong></div></div>
 </section>
 <section class="quick-stats"><div><strong>01</strong><span>Browse styles</span></div><div><strong>02</strong><span>Inspect the details</span></div><div><strong>03</strong><span>Show your barber</span></div></section>
 <section id="catalogue" class="catalogue-section">
 <div class="section-heading"><div><p class="eyebrow">THE LOOKBOOK</p><h2>Find your <em>signature style.</em></h2></div><p class="section-intro">Each poster includes multiple views to help you and your barber understand the haircut.</p></div>
-<div class="toolbar"><label class="search-box">⌕ <input id="style-search" type="search" placeholder="Search haircut styles..." aria-label="Search haircut styles"></label>
+<div class="toolbar"><label class="search-box" for="style-search"><span aria-hidden="true">⌕</span><input id="style-search" type="search" placeholder="Search hair, beard or moustache styles..." aria-label="Search all haircut, beard and moustache styles" autocomplete="off"><kbd>CTRL K</kbd></label>
 <div class="filters" role="group" aria-label="Filter styles"><button class="filter-button active" data-filter="all" aria-pressed="true">All styles</button><button class="filter-button" data-filter="skin" aria-pressed="false">Skin fades</button><button class="filter-button" data-filter="texture" aria-pressed="false">Texture &amp; shape</button><button class="filter-button" data-filter="beard" aria-pressed="false">Beards &amp; moustaches</button></div></div>
 <div class="category-heading"><div><span class="category-number">01</span><h3>Haircut references</h3></div><span class="category-caption">TAP ANY POSTER TO ENLARGE</span></div>
 <div id="hair-grid" class="style-grid">
@@ -197,5 +205,5 @@
 <article class="style-card beard-card" data-name="Beard Styles Reference 073" data-category="beard"><button class="style-image" type="button" data-src="images/beard-moustache/01_Beard_Portraits/073_beard-reference.webp" aria-label="View Beard Styles reference 073"><img src="images/beard-moustache/01_Beard_Portraits/073_beard-reference.webp" alt="Beard Styles reference 073" loading="lazy" decoding="async"><span class="image-open">VIEW <b>↗</b></span><span class="card-number">073</span></button><div class="style-info"><div><h4>Beard Styles 073</h4><p>Beard shape and grooming inspiration</p></div><span>↗</span></div></article></div></section><section class="bottom-cta"><p class="eyebrow">READY FOR A FRESH LOOK?</p><h2>Good style starts<br>with <em>a clear choice.</em></h2><a href="#catalogue" class="primary-button">Browse the gallery ↑</a></section>
 </main>
 <footer><a class="footer-brand" href="#">THE STYLE MENU<span>.</span></a><p>Style inspiration for your next visit.</p><small>Reference photos are illustrative; confirm your preferred cut with your barber.</small></footer>
-<dialog id="image-viewer" class="image-viewer" aria-label="Full-screen haircut reference"><button id="viewer-close" class="viewer-close" type="button" aria-label="Close full-screen image">×</button><button id="viewer-prev" class="viewer-nav viewer-prev" type="button" aria-label="Previous image">‹</button><figure class="viewer-figure"><img id="viewer-image" alt=""><figcaption id="viewer-caption"></figcaption><p class="viewer-hint">SWIPE LEFT OR RIGHT TO BROWSE</p></figure><button id="viewer-next" class="viewer-nav viewer-next" type="button" aria-label="Next image">›</button></dialog>
+<dialog id="image-viewer" class="image-viewer" aria-label="Full-screen grooming reference"><button id="viewer-close" class="viewer-close" type="button" aria-label="Close full-screen image">×</button><button id="viewer-prev" class="viewer-nav viewer-prev" type="button" aria-label="Previous image">‹</button><figure class="viewer-figure"><img id="viewer-image" alt=""><figcaption id="viewer-caption"></figcaption><p class="viewer-hint">SWIPE LEFT OR RIGHT TO BROWSE</p></figure><button id="viewer-next" class="viewer-nav viewer-next" type="button" aria-label="Next image">›</button></dialog>
 </body></html>
