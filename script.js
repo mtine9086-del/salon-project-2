@@ -33,7 +33,7 @@
     hairHeading.hidden = showingBeardOnly;
     hairNote.hidden = showingBeardOnly;
     beardSection.hidden = activeFilter !== "all" && !showingBeardOnly;
-    noResults.hidden = count > 0 || showingBeardOnly;
+    noResults.hidden = count > 0;
     resultCount.textContent = count + (count === 1 ? " style" : " styles");
   }
   function showCard(card) {
