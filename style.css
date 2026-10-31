@@ -6,3 +6,64 @@
 .viewer-caption-detail{max-width:620px;font-size:clamp(11px,1.1vw,14px);line-height:1.55;color:#d3d0c8;font-weight:400}
 .viewer-figure img{max-height:calc(100% - 150px)}
 @media(max-width:520px){.viewer-figure figcaption{width:calc(100% - 28px);padding:8px 10px 2px;gap:5px}.viewer-caption-title{font-size:21px}.viewer-caption-hook{font-size:13px}.viewer-caption-detail{font-size:11px}.viewer-figure img{max-height:calc(100% - 155px)}}
+
+/* Premium editorial refresh — cohesive lookbook system */
+:root{--ink:#201d19;--paper:#f5f1e9;--muted:#82796e;--line:#ddd5c9;--accent:#c5a56a;--olive:#8d7651;--dark:#171512;--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",Arial,sans-serif}
+body{background:var(--paper);color:var(--ink)}
+.announcement{background:var(--dark);color:#e7ddca;letter-spacing:.2em;padding:11px 12px}
+.site-header{height:82px;background:rgba(245,241,233,.96);position:relative;z-index:5}
+.brand-mark span,.footer-brand span{color:var(--accent)}
+.brand-copy small{letter-spacing:.16em}
+.main-nav a{padding:10px 0;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
+.main-nav a:hover,.main-nav a:focus-visible{color:var(--ink);border-color:var(--accent)}
+.header-link{border-color:var(--accent);letter-spacing:.04em}
+.mobile-section-nav{display:none}
+.hero{max-width:1440px;min-height:590px;padding-top:clamp(54px,7vw,96px);padding-bottom:clamp(55px,7vw,88px)}
+.hero h1{font-size:clamp(58px,7.2vw,102px);letter-spacing:-.055em}
+.hero h1 em,.section-heading h2 em,.how-section h2 em{color:var(--olive)}
+.hero-description{font-size:14px;max-width:460px;color:#6f675d}
+.primary-button{background:var(--dark);border:1px solid var(--dark);letter-spacing:.03em}
+.primary-button:hover{background:#3b3328;border-color:#3b3328}
+.text-link{border-color:#b9a88c}
+.hero-photo{width:86%;margin-left:5%;border:9px solid #fff;background:#e6e0d6;box-shadow:0 24px 65px #201d1918}
+.hero-photo img{aspect-ratio:4/5;object-fit:contain;background:#e6e0d6}
+.hero-stamp{background:var(--accent);color:#201d19;box-shadow:0 12px 26px #201d191c}
+.hero-caption{box-shadow:0 12px 30px #201d1910}
+.hero-caption strong{font-size:21px}
+.hero-index{font-weight:700}
+.quick-stats{background:#eee8dd;border-color:#ded6c9}
+.quick-stats strong{color:var(--olive)}
+.catalogue-section{max-width:1440px}
+.section-heading h2{letter-spacing:-.045em}
+.section-intro{color:#756d62}
+.toolbar{align-items:flex-start}
+.search-box{background:#fbf9f5;border-color:#d7cfc2;min-height:46px}
+.search-box input{font-size:12px}
+.search-box kbd{font-size:8px;border-radius:2px;background:#f1ece3}
+.filters{display:grid;grid-template-columns:repeat(4,max-content);gap:7px}
+.filter-button{background:#f8f5ef;border-color:#d8d0c4;color:#514a41;padding:12px 15px;font-size:10px;font-weight:600;white-space:nowrap}
+.filter-button.active,.filter-button:hover{background:var(--dark);border-color:var(--dark);color:#fff}
+.filter-button:focus-visible,.primary-button:focus-visible,.text-link:focus-visible,.header-link:focus-visible,.mobile-section-nav a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.category-heading{border-color:#d8d0c4}
+.category-heading h3{font-size:27px}
+.category-number{color:var(--olive)}
+.style-grid{gap:30px 19px}
+.style-image{background:#e8e2d8;border-color:#ded6c9;aspect-ratio:4/5}
+.style-image img{object-fit:contain}
+.style-card:hover .style-image{border-color:#bca77f}
+.style-info h4{font-size:13px;line-height:1.4}
+.style-info p{font-size:10px;color:#81786d}
+.style-image:focus-visible{outline-color:var(--accent)}
+.beard-card .style-image{aspect-ratio:4/5}
+.how-section{background:#e9e2d6}
+.bottom-cta{background:#191612}
+.bottom-cta .eyebrow{color:var(--accent)}
+.bottom-cta h2 em{color:var(--accent)}
+footer{background:#100f0d}
+.image-viewer{background:rgba(16,15,13,.98);overscroll-behavior:contain}
+.viewer-close,.viewer-nav{border-color:#ffffff55;background:#28241f}
+.viewer-caption-hook{color:var(--accent)}
+@media(max-width:1000px){.filters{grid-template-columns:repeat(2,minmax(0,1fr));width:min(100%,430px)}.filter-button{white-space:normal}.toolbar{align-items:stretch}.search-box{max-width:360px}.hero{min-height:0}}
+@media(max-width:760px){.main-nav{display:none}.mobile-section-nav{display:flex;position:sticky;top:0;z-index:4;background:#f5f1e9f2;border-bottom:1px solid var(--line);padding:0 18px;gap:0;backdrop-filter:blur(12px)}.mobile-section-nav a{flex:1;display:flex;justify-content:center;align-items:center;gap:9px;min-height:46px;text-decoration:none;font-size:10px;font-weight:700;letter-spacing:.02em}.mobile-section-nav a+a{border-left:1px solid var(--line)}.mobile-section-nav span{color:var(--olive)}.hero{grid-template-columns:1fr .85fr}.hero h1{font-size:clamp(50px,8vw,72px)}.toolbar{flex-direction:column}.search-box{max-width:none;width:100%}.filters{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}.filter-button{min-height:42px}.style-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:520px){.announcement{font-size:7px;letter-spacing:.13em}.site-header{height:68px;padding:0 17px}.header-link{font-size:9px}.mobile-section-nav{padding:0 10px}.mobile-section-nav a{font-size:9px;min-height:44px}.hero{padding:42px 20px 40px;gap:26px}.hero h1{font-size:58px}.hero-description{font-size:13px;line-height:1.8}.hero-art{max-width:360px}.hero-photo{width:83%;margin-left:6%}.hero-stamp{width:82px;height:92px}.hero-caption{min-width:160px;padding:11px 14px}.hero-caption strong{font-size:18px}.hero-index{font-size:7px}.quick-stats{padding:16px 8px}.catalogue-section{padding:50px 16px}.section-heading h2{font-size:41px}.toolbar{gap:12px;margin-bottom:30px}.filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.filter-button{font-size:9px;padding:10px 7px;min-height:43px}.category-heading h3{font-size:22px}.category-caption{font-size:6px}.style-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:23px 11px}.style-grid.compact{grid-template-columns:repeat(2,minmax(0,1fr))}.style-info h4{font-size:11px}.style-info p{font-size:9px}.image-viewer{padding:58px 8px 18px}.viewer-figure img{max-height:calc(100% - 150px)}}
+@media(max-width:360px){.hero h1{font-size:51px}.brand-copy strong{font-size:9px}.header-link{font-size:8px}.mobile-section-nav a{font-size:8px;gap:5px}.category-caption{display:none}.style-info h4{font-size:10px}}
