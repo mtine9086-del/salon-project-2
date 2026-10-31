@@ -36,6 +36,20 @@ jobs:
                           z.extract(member, ".")
           print("Extracted curated Curly & Wavy image assets.")
           PY
+      - name: Extract beard and moustache catalogue
+        run: |
+          python - <<'PY'
+          from zipfile import ZipFile
+          from pathlib import Path
+          with ZipFile("beard-moustache-catalogue-upload-ready.zip") as z:
+              for member in z.namelist():
+                  parts = member.split("/")
+                  if member.endswith(".webp") and len(parts) == 3:
+                      target = Path("images/beard-moustache") / parts[1] / parts[2]
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(z.read(member))
+          print("Extracted 42 beard and moustache references.")
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site artifact
