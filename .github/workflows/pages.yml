@@ -20,42 +20,86 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Extract hairstyle image archives
+
+      - name: Prepare clean site directory
+        run: mkdir -p _site
+
+      - name: Extract Curly & Wavy image assets
         run: |
           python - <<'PY'
-          from zipfile import ZipFile
           from pathlib import Path
+          from zipfile import ZipFile
+
           archives = [
               "curly-wavy-web-project-cleaned (1).zip",
               "curly-wavy-8-images-cleaned.zip",
           ]
+          output = Path("_site/images/curly-wavy")
+          output.mkdir(parents=True, exist_ok=True)
+          extracted = set()
           for archive in archives:
-              with ZipFile(archive) as z:
+              path = Path(archive)
+              if not path.exists():
+                  continue
+              with ZipFile(path) as z:
                   for member in z.namelist():
-                      if member.startswith("images/curly-wavy/") and not member.endswith("/"):
-                          z.extract(member, ".")
-          print("Extracted curated Curly & Wavy image assets.")
+                      parts = member.replace("\\", "/").split("/")
+                      if member.lower().endswith(".webp") and "curly-wavy" in parts:
+                          name = parts[-1]
+                          if name not in extracted:
+                              (output / name).write_bytes(z.read(member))
+                              extracted.add(name)
+          print(f"Extracted {len(extracted)} Curly & Wavy WebP assets.")
           PY
+
       - name: Extract beard and moustache catalogue
         run: |
           python - <<'PY'
-          from zipfile import ZipFile
           from pathlib import Path
-          with ZipFile("beard-moustache-catalogue-upload-ready.zip") as z:
+          from zipfile import ZipFile
+
+          archive = Path("beard-moustache-catalogue-upload-ready.zip")
+          if not archive.exists():
+              raise SystemExit("Required beard catalogue archive is missing.")
+          count = 0
+          with ZipFile(archive) as z:
               for member in z.namelist():
-                  parts = member.split("/")
-                  if member.endswith(".webp") and len(parts) == 3:
-                      target = Path("images/beard-moustache") / parts[1] / parts[2]
-                      target.parent.mkdir(parents=True, exist_ok=True)
-                      target.write_bytes(z.read(member))
-          print("Extracted 42 beard and moustache references.")
+                  parts = member.replace("\\", "/").split("/")
+                  if member.lower().endswith(".webp") and len(parts) >= 3:
+                      folder = parts[-2]
+                      filename = parts[-1]
+                      if folder in {"01_Beard_Portraits", "02_Traditional_Turban_Beard", "03_Moustache_Focused"}:
+                          target = Path("_site/images/beard-moustache") / folder / filename
+                          target.parent.mkdir(parents=True, exist_ok=True)
+                          target.write_bytes(z.read(member))
+                          count += 1
+          if count != 42:
+              raise SystemExit(f"Expected 42 beard images, extracted {count}.")
+          print(f"Extracted {count} beard and moustache WebP assets.")
           PY
+
+      - name: Copy website files only
+        run: |
+          cp index.html style.css script.js _site/
+          find . -maxdepth 1 -type f -name '*.webp' -exec cp {} _site/ \;
+          if [ -d images ]; then cp -R images/. _site/images/; fi
+          test -s _site/index.html
+          test -s _site/style.css
+          test -s _site/script.js
+          if find _site -type f \( -name '*.zip' -o -name '*.ps1' -o -name '*.md' \) | grep -q .; then
+            echo "Unexpected source/development files found in public artifact."
+            exit 1
+          fi
+          echo "Clean website artifact prepared."
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "_site"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
