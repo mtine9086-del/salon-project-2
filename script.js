@@ -3,6 +3,10 @@
   const filterButtons = [...document.querySelectorAll(".filter-button")];
   const viewButtons = [...document.querySelectorAll(".view-button")];
   const grid = document.getElementById("hair-grid");
+  const hairHeading = document.querySelector("#catalogue .category-heading");
+  const hairNote = document.querySelector("#catalogue .image-note");
+  const beardSection = document.getElementById("beard-catalogue");
+  const beardGrid = document.getElementById("beard-grid");
   const searchInput = document.getElementById("style-search");
   const noResults = document.getElementById("no-results");
   const resultCount = document.getElementById("result-count");
@@ -24,7 +28,12 @@
       card.hidden = !(matchesQuery && matchesFilter);
       if (!card.hidden) count++;
     });
-    noResults.hidden = count > 0;
+    const showingBeardOnly = activeFilter === "beard";
+    grid.hidden = showingBeardOnly;
+    hairHeading.hidden = showingBeardOnly;
+    hairNote.hidden = showingBeardOnly;
+    beardSection.hidden = activeFilter !== "all" && !showingBeardOnly;
+    noResults.hidden = count > 0 || showingBeardOnly;
     resultCount.textContent = count + (count === 1 ? " style" : " styles");
   }
   function showCard(card) {
