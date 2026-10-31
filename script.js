@@ -22,7 +22,7 @@
     const query = searchInput.value.trim().toLowerCase();
     let count = 0;
     cards.forEach(card => {
-      const text = (card.dataset.name + " " + card.querySelector(".style-info p").textContent).toLowerCase();
+      const text = (card.dataset.name + " " + card.querySelector("h4").textContent + " " + card.querySelector(".style-info p").textContent).toLowerCase();
       const matchesQuery = text.includes(query);
       const matchesFilter = activeFilter === "all" || card.dataset.category === activeFilter;
       card.hidden = !(matchesQuery && matchesFilter);
@@ -41,7 +41,7 @@
     const visible = visibleCards();
     currentIndex = visible.indexOf(card);
     viewerImage.src = card.querySelector(".style-image").dataset.src;
-    viewerImage.alt = card.querySelector("img").alt;
+    viewerImage.alt = card.querySelector("img").alt || (styleName + " reference image");
     const styleName = card.querySelector("h4").textContent.replace(/\\s+/g, " ").trim();
     const styleCopy = {
       "Burst Fade": ["Make every angle count.", "A rounded, ear-focused fade adds bold definition while keeping the overall look clean."],
@@ -74,7 +74,7 @@
     viewerCaption.innerHTML = "";
     const title = document.createElement("strong");
     title.className = "viewer-caption-title";
-    title.textContent = styleName + " Haircut";
+    title.textContent = styleName + (card.dataset.category === "beard" ? " Grooming Reference" : " Haircut");
     const hook = document.createElement("span");
     hook.className = "viewer-caption-hook";
     hook.textContent = copy[0];
@@ -116,6 +116,7 @@
   viewer.addEventListener("pointerup", e => { if (!viewer.open || pointerId !== e.pointerId) return; const dx = e.clientX - startX, dy = e.clientY - startY; pointerId = null; if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) move(dx < 0 ? 1 : -1); }, {passive:true});
   viewer.addEventListener("pointercancel", () => { pointerId = null; }, {passive:true});
   viewer.addEventListener("click", e => { if (e.target === viewer) viewer.close(); });
+  viewer.addEventListener("close", () => { pointerId = null; });
   viewerImage.addEventListener("error", () => { viewerCaption.textContent = "Image could not be loaded."; });
   updateCards();
 })();
