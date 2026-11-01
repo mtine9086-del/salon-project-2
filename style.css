@@ -240,3 +240,19 @@ footer{letter-spacing:.02em}
 @media(max-width:520px){
  .catalogue-section .style-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+
+/* Match every newly uploaded reference poster to the existing haircut catalogue treatment */
+.catalogue-section .style-grid>.style-card .style-image{
+  aspect-ratio:4/5!important;
+  background:#e8e2d8!important;
+  border:1px solid #ded6c9!important;
+  overflow:hidden!important;
+}
+.catalogue-section .style-grid>.style-card .style-image img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#e8e2d8!important;
+}
