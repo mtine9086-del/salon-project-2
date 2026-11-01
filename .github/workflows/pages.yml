@@ -92,6 +92,58 @@ jobs:
           fi
           echo "Clean website artifact prepared."
 
+      - name: Publish all 41 newly uploaded reference images
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import json, html
+
+          archive = Path("salon-images-upload-ready.zip")
+          if not archive.exists():
+              raise SystemExit("salon-images-upload-ready.zip is missing")
+          output = Path("_site/images/uploaded-41")
+          output.mkdir(parents=True, exist_ok=True)
+          with ZipFile(archive) as z:
+              manifest = json.loads(z.read("image-manifest.json"))
+              entries = [e for e in manifest if e.get("output_file", "").lower().endswith(".webp")]
+              if len(entries) != 41:
+                  raise SystemExit(f"Expected 41 WebP images in upload package; found {len(entries)}")
+              cards = {"hair": [], "beard": []}
+              for entry in entries:
+                  source = entry["output_file"]
+                  filename = Path(source).name
+                  target = output / filename
+                  z.write if False else None
+                  target.write_bytes(z.read(source))
+                  label = entry.get("visual_label", Path(filename).stem.replace("-", " ")).replace("_", " ")
+                  label = html.escape(label)
+                  src = "images/uploaded-41/" + filename
+                  is_beard = filename.startswith("beard-")
+                  category = "beard" if is_beard else "texture"
+                  cls = "style-card beard-card" if is_beard else "style-card"
+                  desc = "Beard and moustache grooming reference" if is_beard else "Haircut and hairstyle reference"
+                  card = (f'<article class="{cls}" data-name="{label}" data-category="{category}">'
+                          f'<button class="style-image" type="button" data-src="{src}" aria-label="View {label}">'
+                          f'<img src="{src}" alt="{label} — {desc}" loading="lazy" decoding="async">'
+                          f'<span class="image-open">VIEW <b>↗</b></span></button>'
+                          f'<div class="style-info"><div><h4>{label}</h4><p>{desc}</p></div><span>↗</span></div></article>')
+                  cards["beard" if is_beard else "hair"].append(card)
+
+          index = Path("_site/index.html")
+          page = index.read_text(encoding="utf-8")
+          hair_marker = '<p id="no-results"'
+          beard_marker = '</div>\n</section>'
+          if hair_marker not in page or 'id="beard-grid"' not in page:
+              raise SystemExit("Could not locate gallery grids in index.html")
+          page = page.replace(hair_marker, "\\n".join(cards["hair"]) + "\\n" + hair_marker, 1)
+          beard_start = page.index('id="beard-grid"')
+          beard_end = page.index('</div>', beard_start)
+          page = page[:beard_end] + "\\n" + "\\n".join(cards["beard"]) + "\\n" + page[beard_end:]
+          index.write_text(page, encoding="utf-8")
+          print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
+          PY
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
