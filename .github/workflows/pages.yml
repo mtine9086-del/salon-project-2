@@ -131,13 +131,16 @@ jobs:
 
           index = Path("_site/index.html")
           page = index.read_text(encoding="utf-8")
-          hair_marker = '</div>\\n<p id="no-results"'
+          hair_marker = '<p id="no-results"'
           beard_marker = '</div></section>'
-          if hair_marker not in page or 'id="beard-grid"' not in page:
+          if hair_marker not in page or 'id="hair-grid"' not in page or 'id="beard-grid"' not in page:
               raise SystemExit("Could not locate gallery grids in index.html")
-          # Put uploaded hair cards INSIDE #hair-grid, before its closing div.
-          hair_cards = "\\n".join(cards["hair"])
-          page = page.replace(hair_marker, "\\n" + hair_cards + "\\n</div>\\n<p id="no-results"", 1)
+          # Insert uploaded hairstyle cards before the closing tag of #hair-grid.
+          hair_pos = page.index(hair_marker)
+          hair_grid_close = page.rfind("</div>", 0, hair_pos)
+          if hair_grid_close < page.index('id="hair-grid"'):
+              raise SystemExit("Could not locate closing tag for #hair-grid")
+          page = page[:hair_grid_close] + "\\n" + "\\n".join(cards["hair"]) + "\\n" + page[hair_grid_close:]
           beard_start = page.index('id="beard-grid"')
           beard_end = page.index(beard_marker, beard_start)
           page = page[:beard_end] + "\\n" + "\\n".join(cards["beard"]) + page[beard_end:]
