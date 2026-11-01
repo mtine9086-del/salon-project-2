@@ -131,14 +131,16 @@ jobs:
 
           index = Path("_site/index.html")
           page = index.read_text(encoding="utf-8")
-          hair_marker = '<p id="no-results"'
+          hair_marker = '</div>\\n<p id="no-results"'
           beard_marker = '</div></section>'
           if hair_marker not in page or 'id="beard-grid"' not in page:
               raise SystemExit("Could not locate gallery grids in index.html")
-          page = page.replace(hair_marker, "\n".join(cards["hair"]) + "\n" + hair_marker, 1)
+          # Put uploaded hair cards INSIDE #hair-grid, before its closing div.
+          hair_cards = "\\n".join(cards["hair"])
+          page = page.replace(hair_marker, "\\n" + hair_cards + "\\n</div>\\n<p id="no-results"", 1)
           beard_start = page.index('id="beard-grid"')
           beard_end = page.index(beard_marker, beard_start)
-          page = page[:beard_end] + "\n" + "\n".join(cards["beard"]) + page[beard_end:]
+          page = page[:beard_end] + "\\n" + "\\n".join(cards["beard"]) + page[beard_end:]
           index.write_text(page, encoding="utf-8")
           print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
           PY
