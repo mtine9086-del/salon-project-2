@@ -114,8 +114,7 @@ jobs:
                   source = entry["output_file"]
                   filename = Path(source).name
                   target = output / filename
-                  z.write if False else None
-                  target.write_bytes(z.read(source))
+                          target.write_bytes(z.read(source))
                   label = entry.get("visual_label", Path(filename).stem.replace("-", " ")).replace("_", " ")
                   label = html.escape(label)
                   src = "images/uploaded-41/" + filename
@@ -136,10 +135,10 @@ jobs:
           beard_marker = '</div>\n</section>'
           if hair_marker not in page or 'id="beard-grid"' not in page:
               raise SystemExit("Could not locate gallery grids in index.html")
-          page = page.replace(hair_marker, "\\n".join(cards["hair"]) + "\\n" + hair_marker, 1)
+          page = page.replace(hair_marker, "\n".join(cards["hair"]) + "\n" + hair_marker, 1)
           beard_start = page.index('id="beard-grid"')
-          beard_end = page.index('</div>', beard_start)
-          page = page[:beard_end] + "\\n" + "\\n".join(cards["beard"]) + "\\n" + page[beard_end:]
+          beard_end = page.index(beard_marker, beard_start)
+          page = page[:beard_end] + "\n" + "\n".join(cards["beard"]) + page[beard_end:]
           index.write_text(page, encoding="utf-8")
           print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
           PY
