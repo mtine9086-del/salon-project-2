@@ -40,9 +40,9 @@
     if (!card) return;
     const visible = visibleCards();
     currentIndex = visible.indexOf(card);
+    const styleName = card.querySelector("h4").textContent.replace(/\\s+/g, " ").trim();
     viewerImage.src = card.querySelector(".style-image").dataset.src;
     viewerImage.alt = card.querySelector("img").alt || (styleName + " reference image");
-    const styleName = card.querySelector("h4").textContent.replace(/\\s+/g, " ").trim();
     const styleCopy = {
       "Burst Fade": ["Make every angle count.", "A rounded, ear-focused fade adds bold definition while keeping the overall look clean."],
       "Comb Over Fade": ["Classic polish. Modern edge.", "A side-swept finish paired with faded sides delivers a sharp, versatile look."],
