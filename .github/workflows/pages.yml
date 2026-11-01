@@ -114,7 +114,7 @@ jobs:
                   source = entry["output_file"]
                   filename = Path(source).name
                   target = output / filename
-                          target.write_bytes(z.read(source))
+                  target.write_bytes(z.read(source))
                   label = entry.get("visual_label", Path(filename).stem.replace("-", " ")).replace("_", " ")
                   label = html.escape(label)
                   src = "images/uploaded-41/" + filename
