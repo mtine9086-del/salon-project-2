@@ -132,7 +132,7 @@ jobs:
           index = Path("_site/index.html")
           page = index.read_text(encoding="utf-8")
           hair_marker = '<p id="no-results"'
-          beard_marker = '</div>\n</section>'
+          beard_marker = '</div></section>'
           if hair_marker not in page or 'id="beard-grid"' not in page:
               raise SystemExit("Could not locate gallery grids in index.html")
           page = page.replace(hair_marker, "\n".join(cards["hair"]) + "\n" + hair_marker, 1)
