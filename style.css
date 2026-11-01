@@ -142,3 +142,49 @@ footer{letter-spacing:.02em}
 }
 @media(hover:none){.style-card:hover .style-image{transform:none;box-shadow:none}.style-card:hover .style-image img{transform:none}}
 @media(prefers-reduced-motion:reduce){.style-image,.style-image img,.style-info>span,.filter-button{transition:none!important}}
+
+
+/* Beard reference gallery: enforce the exact same card geometry for every item */
+#beard-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:start!important;
+  gap:30px 19px!important;
+}
+#beard-grid>.style-card{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+  align-self:start!important;
+}
+#beard-grid>.style-card>.style-image{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:4/5!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+#beard-grid>.style-card>.style-image>img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+}
+@media(max-width:1000px){
+  #beard-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+  #beard-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:25px 13px!important}
+}
+@media(max-width:520px){
+  #beard-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:22px 11px!important}
+}
