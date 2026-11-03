@@ -38,7 +38,7 @@
     hairNote.hidden = !hairVisible;
     beardSection.hidden = !beardVisible;
     noResults.hidden = shown.length !== 0;
-    count.textContent = shown.length + (shown.length === 1 ? " style shown" : " styles shown");
+    count.textContent = shown.length + (shown.length === 1 ? " style found" : " styles found");
     filters.forEach(button => {
       const active = button.dataset.filter === filter;
       button.classList.toggle("active", active);
