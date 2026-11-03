@@ -21,28 +21,53 @@ function setZoom(value){zoomLevel=Math.max(1,Math.min(4,value));if(zoomLevel===1
 zoomControls.addEventListener("click",e=>{const action=e.target.closest("button")?.dataset.zoom;if(action==="in")setZoom(zoomLevel+.5);if(action==="out")setZoom(zoomLevel-.5);if(action==="reset")setZoom(1);});
 image.addEventListener("wheel",e=>{if(!dialog.open)return;e.preventDefault();setZoom(zoomLevel+(e.deltaY<0?.25:-.25));},{passive:false});
 image.addEventListener("dblclick",e=>{e.preventDefault();setZoom(zoomLevel===1?2:1);});
-// Mouse/pen drag-to-pan. Touch gestures are handled separately below.
-image.addEventListener("pointerdown",e=>{if(e.pointerType==="touch"||zoomLevel<=1)return;dragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragOriginX=panX;dragOriginY=panY;image.setPointerCapture(e.pointerId);image.style.cursor="grabbing";});
-image.addEventListener("pointermove",e=>{if(!dragging||e.pointerType==="touch")return;panX=dragOriginX+e.clientX-dragStartX;panY=dragOriginY+e.clientY-dragStartY;applyZoom();image.style.cursor="grabbing";});
-const stopImageDrag=()=>{dragging=false;applyZoom();};
-image.addEventListener("pointerup",stopImageDrag);image.addEventListener("pointercancel",stopImageDrag);
-
-// Native two-finger pinch zoom, one-finger pan while zoomed, and no browser page zoom.
-let pinchStartDistance=0,pinchStartZoom=1,pinchMidX=0,pinchMidY=0,touchPanStartX=0,touchPanStartY=0,touchPanOriginX=0,touchPanOriginY=0;
-const touchDistance=(a,b)=>Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY);
-image.addEventListener("touchstart",e=>{
+// Unified Pointer Events: two-finger pinch, one-finger pan, mouse/pen drag.
+const activePointers=new Map();
+let gestureMode="none",gestureStartDistance=0,gestureStartZoom=1,gestureStartPanX=0,gestureStartPanY=0,gestureStartMidX=0,gestureStartMidY=0,gestureStartX=0,gestureStartY=0;
+const pointerDistance=(a,b)=>Math.hypot(b.x-a.x,b.y-a.y);
+const pointerMidpoint=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+image.style.touchAction="none";
+image.addEventListener("pointerdown",e=>{
  if(!dialog.open)return;
- if(e.touches.length===2){e.preventDefault();dragging=false;pinchStartDistance=touchDistance(e.touches[0],e.touches[1]);pinchStartZoom=zoomLevel;pinchMidX=(e.touches[0].clientX+e.touches[1].clientX)/2;pinchMidY=(e.touches[0].clientY+e.touches[1].clientY)/2;}
- else if(e.touches.length===1&&zoomLevel>1){e.preventDefault();touchPanStartX=e.touches[0].clientX;touchPanStartY=e.touches[0].clientY;touchPanOriginX=panX;touchPanOriginY=panY;}
-},{passive:false});
-image.addEventListener("touchmove",e=>{
- if(!dialog.open)return;
- if(e.touches.length===2&&pinchStartDistance>0){e.preventDefault();const distance=touchDistance(e.touches[0],e.touches[1]);zoomLevel=Math.max(1,Math.min(4,pinchStartZoom*distance/pinchStartDistance));if(zoomLevel===1){panX=0;panY=0;}applyZoom();}
- else if(e.touches.length===1&&zoomLevel>1){e.preventDefault();panX=touchPanOriginX+e.touches[0].clientX-touchPanStartX;panY=touchPanOriginY+e.touches[0].clientY-touchPanStartY;applyZoom();}
-},{passive:false});
-const endTouchGesture=()=>{pinchStartDistance=0;};
-image.addEventListener("touchend",endTouchGesture,{passive:true});
-image.addEventListener("touchcancel",endTouchGesture,{passive:true});
+ e.preventDefault();
+ image.setPointerCapture(e.pointerId);
+ activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(activePointers.size===2){
+  const [a,b]=[...activePointers.values()];
+  gestureMode="pinch";gestureStartDistance=Math.max(1,pointerDistance(a,b));gestureStartZoom=zoomLevel;
+  const mid=pointerMidpoint(a,b);gestureStartMidX=mid.x;gestureStartMidY=mid.y;gestureStartPanX=panX;gestureStartPanY=panY;
+ }else if(activePointers.size===1&&zoomLevel>1){
+  gestureMode="pan";gestureStartX=e.clientX;gestureStartY=e.clientY;gestureStartPanX=panX;gestureStartPanY=panY;
+ }else{gestureMode="none";}
+});
+image.addEventListener("pointermove",e=>{
+ if(!activePointers.has(e.pointerId))return;
+ e.preventDefault();activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(activePointers.size>=2&&gestureMode==="pinch"){
+  const [a,b]=[...activePointers.values()];
+  zoomLevel=Math.max(1,Math.min(4,gestureStartZoom*pointerDistance(a,b)/gestureStartDistance));
+  if(zoomLevel===1){panX=0;panY=0;}else{
+   const mid=pointerMidpoint(a,b);
+   panX=gestureStartPanX+(mid.x-gestureStartMidX);
+   panY=gestureStartPanY+(mid.y-gestureStartMidY);
+  }
+  applyZoom();
+ }else if(activePointers.size===1&&gestureMode==="pan"&&zoomLevel>1){
+  panX=gestureStartPanX+e.clientX-gestureStartX;panY=gestureStartPanY+e.clientY-gestureStartY;applyZoom();
+ }
+});
+function finishPointer(e){
+ activePointers.delete(e.pointerId);
+ if(activePointers.size===1&&zoomLevel>1){
+  const [remaining]=[...activePointers.values()];gestureMode="pan";gestureStartX=remaining.x;gestureStartY=remaining.y;gestureStartPanX=panX;gestureStartPanY=panY;
+ }else if(activePointers.size===0){gestureMode="none";applyZoom();}
+ else if(activePointers.size===2){
+  const [a,b]=[...activePointers.values()];gestureMode="pinch";gestureStartDistance=Math.max(1,pointerDistance(a,b));gestureStartZoom=zoomLevel;const mid=pointerMidpoint(a,b);gestureStartMidX=mid.x;gestureStartMidY=mid.y;gestureStartPanX=panX;gestureStartPanY=panY;
+ }
+}
+image.addEventListener("pointerup",finishPointer);
+image.addEventListener("pointercancel",finishPointer);
+image.addEventListener("lostpointercapture",finishPointer);
 
 const suggestionList=document.createElement("datalist");
 suggestionList.id="style-suggestions";
@@ -80,7 +105,7 @@ document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 close.addEventListener("click",()=>dialog.close());prev.addEventListener("click",()=>move(-1));next.addEventListener("click",()=>move(1));
 dialog.addEventListener("close",()=>{document.body.classList.remove("viewer-open");barber.setAttribute("aria-pressed","false");dialog.classList.remove("barber-mode");if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}if(opener?.isConnected)opener.focus();});
 dialog.addEventListener("pointerdown",e=>{touchX=e.clientX;touchY=e.clientY;},{passive:true});
-dialog.addEventListener("pointerup",e=>{const dx=e.clientX-touchX,dy=e.clientY-touchY;if(zoomLevel===1&&Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.2)move(dx<0?1:-1);},{passive:true});
+dialog.addEventListener("pointerup",e=>{if(e.target===image||activePointers.size>0)return;const dx=e.clientX-touchX,dy=e.clientY-touchY;if(zoomLevel===1&&Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.2)move(dx<0?1:-1);},{passive:true});
 barber.addEventListener("click",async()=>{const enabled=barber.getAttribute("aria-pressed")!=="true";barber.setAttribute("aria-pressed",String(enabled));dialog.classList.toggle("barber-mode",enabled);if(enabled&&"wakeLock"in navigator){try{wakeLock=await navigator.wakeLock.request("screen");}catch(_){}}else if(wakeLock){await wakeLock.release().catch(()=>{});wakeLock=null;}});
 image.addEventListener("error",()=>{image.alt="Image unavailable";caption.textContent="This image could not be loaded. Close and choose another reference.";});
 paint();
