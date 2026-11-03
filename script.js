@@ -9,7 +9,15 @@ const noResults=document.getElementById("no-results"),count=document.getElementB
 const clear=document.getElementById("clear-search"),showAll=document.getElementById("show-all");
 const dialog=document.getElementById("image-viewer"),image=document.getElementById("viewer-image"),caption=document.getElementById("viewer-caption");
 const close=document.getElementById("viewer-close"),prev=document.getElementById("viewer-prev"),next=document.getElementById("viewer-next"),barber=document.getElementById("barber-mode");
-const PAGE_SIZE=24;let filter="all",matches=[],visibleCount={hair:PAGE_SIZE,beard:PAGE_SIZE},index=0,opener=null,searchTimer=0,touchX=0,touchY=0,wakeLock=null;
+const PAGE_SIZE=24;
+const suggestionList=document.createElement("datalist");
+suggestionList.id="style-suggestions";
+search.setAttribute("list",suggestionList.id);
+search.setAttribute("aria-autocomplete","list");
+document.body.appendChild(suggestionList);
+const suggestionNames=[...new Set(cards.map(c=>(c.querySelector("h4")?.textContent||c.dataset.name||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+suggestionNames.forEach(name=>{const option=document.createElement("option");option.value=name;suggestionList.appendChild(option);});
+let filter="all",matches=[],visibleCount={hair:PAGE_SIZE,beard:PAGE_SIZE},index=0,opener=null,searchTimer=0,touchX=0,touchY=0,wakeLock=null;
 const norm=s=>(s||"").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const isBeard=c=>c.dataset.category==="beard";
 function category(c){if(isBeard(c))return"beard";const name=norm(c.dataset.name+" "+c.textContent);if(/curly|wavy/.test(name))return"curly";return c.dataset.category==="skin"||/fade|taper/.test(norm(c.dataset.name))?"skin":"texture";}
