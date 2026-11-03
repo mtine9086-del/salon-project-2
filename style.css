@@ -256,3 +256,104 @@ footer{letter-spacing:.02em}
   object-position:center!important;
   background:#e8e2d8!important;
 }
+
+
+/* THE STYLE MENU — premium menu-card typography and catalogue polish */
+:root{
+  --paper:#f6f2ea;--ink:#211d18;--muted:#746c61;--line:#ddd3c4;
+  --accent:#b99a67;--olive:#806b4c;--dark:#171512;
+}
+body{font-size:16px;letter-spacing:0}
+.announcement{font-size:10px;letter-spacing:.22em;padding:13px 16px}
+.site-header{min-height:88px}
+.brand-mark{font-size:42px}
+.brand-copy strong{font-size:13px;letter-spacing:.17em}
+.brand-copy small{font-size:9px;letter-spacing:.2em}
+.main-nav a,.header-link{font-size:13px}
+.hero{min-height:640px}
+.hero .eyebrow,.hero-index{font-size:10px}
+.hero h1{font-size:clamp(64px,7.5vw,108px);line-height:.99}
+.hero-description{font-size:16px;line-height:1.85;max-width:490px}
+.primary-button,.text-link{font-size:13px}
+.hero-proof{font-size:12px}
+.hero-caption span{font-size:9px}
+.hero-caption strong{font-size:24px}
+.quick-stats span{font-size:12px}
+.catalogue-section{padding-top:clamp(68px,8vw,112px)}
+.section-heading h2{font-size:clamp(46px,5vw,70px)}
+.section-intro{font-size:14px;line-height:1.8}
+.search-box input{font-size:14px}
+.search-box kbd{font-size:10px}
+.filter-button{font-size:12px;padding:13px 17px}
+.category-heading h3{font-size:30px}
+.category-caption{font-size:10px;letter-spacing:.15em}
+.style-grid{gap:38px 24px}
+.catalogue-section .style-grid>.style-card .style-image{border-radius:4px}
+.style-info{padding:15px 2px 0}
+.style-info h4{font-size:16px!important;line-height:1.35;font-weight:700;letter-spacing:-.02em}
+.style-info p{font-size:12px!important;line-height:1.65;margin-top:5px;color:#746c61}
+.style-info>span,.image-open{display:none!important}
+.style-card:hover .style-image{transform:translateY(-2px)}
+.how-section h2{font-size:clamp(44px,4.8vw,66px)}
+.how-steps h3{font-size:15px}
+.how-steps p{font-size:13px}
+.bottom-cta h2{font-size:clamp(48px,5.5vw,76px)}
+footer p{font-size:12px}
+footer small{font-size:11px}
+.viewer-caption-title{font-size:clamp(24px,3vw,36px)}
+.viewer-caption-hook{font-size:clamp(15px,1.5vw,19px)}
+.viewer-caption-detail{font-size:14px;line-height:1.65}
+@media(max-width:1000px){
+ .style-grid{gap:30px 18px}
+ .style-info h4{font-size:15px!important}
+ .style-info p{font-size:12px!important}
+}
+@media(max-width:760px){
+ .site-header{min-height:76px}
+ .hero{min-height:0}
+ .hero-description{font-size:15px}
+ .mobile-section-nav a{font-size:12px;min-height:52px}
+ .style-grid{gap:28px 16px}
+ .style-info h4{font-size:15px!important}
+ .style-info p{font-size:12px!important}
+}
+@media(max-width:520px){
+ .announcement{font-size:9px;letter-spacing:.14em;padding:11px 10px}
+ .site-header{height:72px;padding:0 16px}
+ .brand-mark{font-size:36px}
+ .brand-copy strong{font-size:11px}
+ .brand-copy small{font-size:8px}
+ .header-link{font-size:11px}
+ .mobile-section-nav a{font-size:11px;min-height:49px}
+ .hero{padding:44px 20px 42px;gap:28px}
+ .hero h1{font-size:clamp(54px,13vw,68px)}
+ .hero-description{font-size:14px;line-height:1.8}
+ .hero-proof{font-size:11px}
+ .hero-caption strong{font-size:21px}
+ .quick-stats span{font-size:10px}
+ .catalogue-section{padding:58px 16px}
+ .section-heading h2{font-size:clamp(39px,10vw,48px)}
+ .section-intro{font-size:13px}
+ .search-box input{font-size:13px}
+ .filter-button{font-size:11px;min-height:46px;padding:10px 8px}
+ .category-heading h3{font-size:25px}
+ .category-caption{font-size:8px}
+ .style-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:25px 12px}
+ .catalogue-section .style-grid>.style-card .style-image{aspect-ratio:4/5!important}
+ .style-info{padding:11px 1px 0}
+ .style-info h4{font-size:14px!important;line-height:1.35}
+ .style-info p{font-size:11px!important;line-height:1.5}
+ .how-section h2{font-size:39px}
+ .how-steps h3{font-size:14px}
+ .how-steps p{font-size:12px}
+ .bottom-cta h2{font-size:43px}
+ footer p{font-size:11px}
+ footer small{font-size:10px}
+ .viewer-caption-title{font-size:22px}
+ .viewer-caption-hook{font-size:14px}
+ .viewer-caption-detail{font-size:12px}
+}
+@media(max-width:360px){
+ .style-info h4{font-size:13px!important}
+ .style-info p{font-size:10px!important}
+}
