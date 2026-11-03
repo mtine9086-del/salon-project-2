@@ -21,10 +21,28 @@ function setZoom(value){zoomLevel=Math.max(1,Math.min(4,value));if(zoomLevel===1
 zoomControls.addEventListener("click",e=>{const action=e.target.closest("button")?.dataset.zoom;if(action==="in")setZoom(zoomLevel+.5);if(action==="out")setZoom(zoomLevel-.5);if(action==="reset")setZoom(1);});
 image.addEventListener("wheel",e=>{if(!dialog.open)return;e.preventDefault();setZoom(zoomLevel+(e.deltaY<0?.25:-.25));},{passive:false});
 image.addEventListener("dblclick",e=>{e.preventDefault();setZoom(zoomLevel===1?2:1);});
-image.addEventListener("pointerdown",e=>{if(zoomLevel<=1)return;dragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragOriginX=panX;dragOriginY=panY;image.setPointerCapture(e.pointerId);image.style.cursor="grabbing";});
-image.addEventListener("pointermove",e=>{if(!dragging)return;panX=dragOriginX+e.clientX-dragStartX;panY=dragOriginY+e.clientY-dragStartY;applyZoom();image.style.cursor="grabbing";});
+// Mouse/pen drag-to-pan. Touch gestures are handled separately below.
+image.addEventListener("pointerdown",e=>{if(e.pointerType==="touch"||zoomLevel<=1)return;dragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragOriginX=panX;dragOriginY=panY;image.setPointerCapture(e.pointerId);image.style.cursor="grabbing";});
+image.addEventListener("pointermove",e=>{if(!dragging||e.pointerType==="touch")return;panX=dragOriginX+e.clientX-dragStartX;panY=dragOriginY+e.clientY-dragStartY;applyZoom();image.style.cursor="grabbing";});
 const stopImageDrag=()=>{dragging=false;applyZoom();};
 image.addEventListener("pointerup",stopImageDrag);image.addEventListener("pointercancel",stopImageDrag);
+
+// Native two-finger pinch zoom, one-finger pan while zoomed, and no browser page zoom.
+let pinchStartDistance=0,pinchStartZoom=1,pinchMidX=0,pinchMidY=0,touchPanStartX=0,touchPanStartY=0,touchPanOriginX=0,touchPanOriginY=0;
+const touchDistance=(a,b)=>Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY);
+image.addEventListener("touchstart",e=>{
+ if(!dialog.open)return;
+ if(e.touches.length===2){e.preventDefault();dragging=false;pinchStartDistance=touchDistance(e.touches[0],e.touches[1]);pinchStartZoom=zoomLevel;pinchMidX=(e.touches[0].clientX+e.touches[1].clientX)/2;pinchMidY=(e.touches[0].clientY+e.touches[1].clientY)/2;}
+ else if(e.touches.length===1&&zoomLevel>1){e.preventDefault();touchPanStartX=e.touches[0].clientX;touchPanStartY=e.touches[0].clientY;touchPanOriginX=panX;touchPanOriginY=panY;}
+},{passive:false});
+image.addEventListener("touchmove",e=>{
+ if(!dialog.open)return;
+ if(e.touches.length===2&&pinchStartDistance>0){e.preventDefault();const distance=touchDistance(e.touches[0],e.touches[1]);zoomLevel=Math.max(1,Math.min(4,pinchStartZoom*distance/pinchStartDistance));if(zoomLevel===1){panX=0;panY=0;}applyZoom();}
+ else if(e.touches.length===1&&zoomLevel>1){e.preventDefault();panX=touchPanOriginX+e.touches[0].clientX-touchPanStartX;panY=touchPanOriginY+e.touches[0].clientY-touchPanStartY;applyZoom();}
+},{passive:false});
+const endTouchGesture=()=>{pinchStartDistance=0;};
+image.addEventListener("touchend",endTouchGesture,{passive:true});
+image.addEventListener("touchcancel",endTouchGesture,{passive:true});
 
 const suggestionList=document.createElement("datalist");
 suggestionList.id="style-suggestions";
