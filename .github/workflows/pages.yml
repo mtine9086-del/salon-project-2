@@ -97,7 +97,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           from zipfile import ZipFile
-          import json, html
+          import json, html, re
 
           archive = Path("salon-images-upload-ready.zip")
           if not archive.exists():
@@ -138,11 +138,11 @@ jobs:
           def find_div_close(page, grid_id):
               # Match the actual closing </div> for the element carrying grid_id.
               # This counts nested card divs rather than guessing from nearby markup.
-              tag = re.search(r'<div\\b[^>]*\\bid="' + re.escape(grid_id) + r'"[^>]*>', page)
+              tag = re.search(r'<div\b[^>]*\bid="' + re.escape(grid_id) + r'"[^>]*>', page)
               if not tag:
                   raise SystemExit("Cannot find opening div for " + grid_id)
               depth = 1
-              token = re.compile(r'</?div\\b[^>]*>', re.I)
+              token = re.compile(r'</?div\b[^>]*>', re.I)
               for match in token.finditer(page, tag.end()):
                   if match.group(0).lower().startswith("</div"):
                       depth -= 1
@@ -155,7 +155,7 @@ jobs:
           for grid_id, batch in (("hair-grid", cards["hair"]), ("beard-grid", cards["beard"])):
               if batch:
                   close = find_div_close(page, grid_id)
-                  page = page[:close] + "\\n" + "\\n".join(batch) + "\\n" + page[close:]
+                  page = page[:close] + "\n" + "\\n".join(batch) + "\n" + page[close:]
           index.write_text(page, encoding="utf-8")
           print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
           PY
@@ -187,7 +187,23 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           from zipfile import ZipFile
-          import html
+          import html, re
+
+          def find_div_close(page, grid_id):
+              # Find the matching close tag for the requested grid, including nested card divs.
+              tag = re.search(r'<div\b[^>]*\bid="' + re.escape(grid_id) + r'"[^>]*>', page, re.I)
+              if not tag:
+                  raise SystemExit("Cannot find opening div for " + grid_id)
+              depth = 1
+              token = re.compile(r'</?div\b[^>]*>', re.I)
+              for match in token.finditer(page, tag.end()):
+                  if match.group(0).lower().startswith("</div"):
+                      depth -= 1
+                      if depth == 0:
+                          return match.start()
+                  else:
+                      depth += 1
+              raise SystemExit("Cannot find matching closing div for " + grid_id)
 
           page_path = Path("_site/index.html")
           page = page_path.read_text(encoding="utf-8")
@@ -238,7 +254,7 @@ jobs:
               if not cards_html:
                   return page
               close = find_div_close(page, grid_id)
-              return page[:close] + "\\n" + "\\n".join(cards_html) + "\\n" + page[close:]
+              return page[:close] + "\n" + "\\n".join(cards_html) + "\n" + page[close:]
 
           page = insert_before_grid_close(page, "hair-grid", cards["hair"])
           page = insert_before_grid_close(page, "beard-grid", cards["beard"])
