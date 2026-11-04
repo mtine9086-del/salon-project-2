@@ -241,6 +241,103 @@ jobs:
 
           page = insert_before_grid_close(page, "hair-grid", cards["hair"])
           page = insert_before_grid_close(page, "beard-grid", cards["beard"])
+
+          # Final layout guard: inline styles win over stale/duplicate external CSS.
+          # This changes presentation only; no image files or image paths are removed.
+          layout_guard = """
+          <style id="catalogue-layout-guard">
+          #hair-grid.style-grid, #beard-grid.style-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            grid-auto-flow: row !important;
+            align-items: start !important;
+            justify-items: stretch !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            gap: 22px !important;
+          }
+          #hair-grid > article.style-card, #beard-grid > article.style-card {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            grid-column: auto !important;
+            overflow: hidden !important;
+          }
+          #hair-grid .style-image, #beard-grid .style-image {
+            display: block !important;
+            flex: 0 0 auto !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            height: auto !important;
+            aspect-ratio: 4 / 5 !important;
+          }
+          #hair-grid .style-image img, #beard-grid .style-image img {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+          }
+          #hair-grid .style-info, #beard-grid .style-info {
+            display: flex !important;
+            align-items: flex-start !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            gap: 8px !important;
+          }
+          #hair-grid .style-info > div, #beard-grid .style-info > div {
+            flex: 1 1 0 !important;
+            min-width: 0 !important;
+          }
+          #hair-grid .style-info > span, #beard-grid .style-info > span {
+            flex: 0 0 auto !important;
+          }
+          #hair-grid .style-info h4, #hair-grid .style-info p,
+          #beard-grid .style-info h4, #beard-grid .style-info p {
+            display: block !important;
+            width: auto !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+            word-break: normal !important;
+            overflow-wrap: anywhere !important;
+            writing-mode: horizontal-tb !important;
+          }
+          @media (min-width: 1200px) {
+            #hair-grid.style-grid, #beard-grid.style-grid {
+              grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            }
+          }
+          @media (max-width: 760px) {
+            #hair-grid.style-grid, #beard-grid.style-grid {
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 12px !important;
+            }
+            #hair-grid .style-info h4, #beard-grid .style-info h4 { font-size: 13px !important; }
+            #hair-grid .style-info p, #beard-grid .style-info p { font-size: 11px !important; }
+          }
+          @media (max-width: 360px) {
+            #hair-grid.style-grid, #beard-grid.style-grid {
+              grid-template-columns: minmax(0, 1fr) !important;
+            }
+          }
+          </style>
+          """
+          if "</head>" not in page:
+              raise SystemExit("Cannot insert catalogue layout guard: </head> missing")
+          page = page.replace("</head>", layout_guard + "\\n</head>", 1)
+
+          # Guard against cards being nested inside another card instead of the grid.
+          for grid_id in ("hair-grid", "beard-grid"):
+              grid_start = page.index('id="' + grid_id + '"')
+              grid_open_end = page.index(">", grid_start) + 1
+              grid_close = page.index("</div>", grid_open_end)
+              grid_html = page[grid_open_end:grid_close]
+              if "<article" not in grid_html:
+                  raise SystemExit("No direct catalogue cards found in " + grid_id)
+              if "</article>" not in grid_html:
+                  raise SystemExit("Unclosed catalogue card in " + grid_id)
+
           page_path.write_text(page, encoding="utf-8")
           print(f"Published {image_count} additional catalogue images: {len(cards['hair'])} hair and {len(cards['beard'])} beard.")
           PY
