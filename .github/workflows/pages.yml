@@ -228,9 +228,10 @@ jobs:
               start = page.index('id="' + grid_id + '"')
               marker = '<p id="no-results"'
               if grid_id == "beard-grid":
-                  # Beard grid ends before the enclosing beard section closes.
-                  end = page.index('</div></section>', start)
-                  close = page.rfind('</div>', start, end)
+                  # The first </div> in this exact delimiter closes #beard-grid.
+                  # Do not use rfind(): that selects the last card's .style-info
+                  # wrapper and nests every appended card inside a flex row.
+                  close = page.index('</div></section>', start)
               else:
                   no_results = page.index(marker, start)
                   close = page.rfind('</div>', start, no_results)
