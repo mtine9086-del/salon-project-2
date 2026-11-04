@@ -273,3 +273,77 @@ body{background:var(--color-bg-canvas);color:var(--color-text-primary);font-fami
   .style-grid .style-info h4 { font-size: 13px !important; }
   .style-grid .style-info p { font-size: 11px !important; }
 }
+
+
+/* Definitive catalogue grid: explicit column counts avoid auto-fit/min-content collapse */
+html body main .catalogue-section .style-grid,
+html body main .beard-section .style-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-flow: row !important;
+  grid-auto-columns: minmax(0, 1fr) !important;
+  align-items: start !important;
+  justify-items: stretch !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  gap: 24px !important;
+}
+html body main .catalogue-section .style-grid > article.style-card,
+html body main .beard-section .style-grid > article.style-card {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-column: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: hidden !important;
+}
+html body main .style-grid > article.style-card > .style-image {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 / 5 !important;
+  padding: 8px !important;
+}
+html body main .style-grid > article.style-card > .style-image > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  object-fit: contain !important;
+}
+html body main .style-grid .style-info {
+  display: flex !important;
+  flex: 1 0 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+html body main .style-grid .style-info > div { min-width: 0 !important; }
+html body main .style-grid .style-info h4,
+html body main .style-grid .style-info p {
+  max-width: 100% !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+}
+@media (min-width: 761px) and (max-width: 1099px) {
+  html body main .catalogue-section .style-grid,
+  html body main .beard-section .style-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+}
+@media (max-width: 760px) {
+  html body main .catalogue-section .style-grid,
+  html body main .beard-section .style-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+@media (max-width: 360px) {
+  html body main .catalogue-section .style-grid,
+  html body main .beard-section .style-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
