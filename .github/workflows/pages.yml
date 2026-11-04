@@ -170,6 +170,80 @@ jobs:
                       print("CURATED_MANIFEST_SAMPLE="+repr(data[:3] if isinstance(data,list) else list(data)[:20]))
           PY
 
+      - name: Publish curated and Curly & Wavy catalogue cards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import html
+
+          page_path = Path("_site/index.html")
+          page = page_path.read_text(encoding="utf-8")
+          cards = {"hair": [], "beard": []}
+          image_count = 0
+
+          # Publish every curated pack image and create a matching catalogue card.
+          with ZipFile("salon-curated-upload-pack.zip") as z:
+              for member in z.namelist():
+                  lower = member.lower()
+                  if not lower.endswith((".webp", ".jpg", ".jpeg", ".png")):
+                      continue
+                  parts = member.replace("\\\\", "/").split("/")
+                  if len(parts) < 3 or parts[-2] not in {"haircuts", "beard-styles"}:
+                      continue
+                  kind = "beard" if parts[-2] == "beard-styles" else "hair"
+                  filename = Path(parts[-1]).name
+                  target = Path("_site/images/curated") / kind / filename
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(z.read(member))
+                  label = html.escape(Path(filename).stem.replace("-", " ").title())
+                  src = "images/curated/" + kind + "/" + filename
+                  cls = "style-card beard-card" if kind == "beard" else "style-card"
+                  desc = "Beard and moustache grooming reference" if kind == "beard" else "Haircut and hairstyle reference"
+                  cards[kind].append(
+                      f'<article class="{cls}" data-name="{label}" data-category="{kind}">'
+                      f'<button class="style-image" type="button" data-src="{src}" aria-label="View {label}">'
+                      f'<img src="{src}" alt="{label} — {desc}" loading="lazy" decoding="async">'
+                      f'<span class="image-open">VIEW <b>↗</b></span></button>'
+                      f'<div class="style-info"><div><h4>{label}</h4><p>{desc}</p></div><span>↗</span></div></article>')
+                  image_count += 1
+
+          # The curly archives are already extracted into _site/images/curly-wavy.
+          curly_dir = Path("_site/images/curly-wavy")
+          for path in sorted(curly_dir.glob("*.webp")):
+              filename = path.name
+              label = html.escape(Path(filename).stem.replace("-", " ").replace("_", " ").title())
+              src = "images/curly-wavy/" + filename
+              cards["hair"].append(
+                  f'<article class="style-card" data-name="{label}" data-category="curly">'
+                  f'<button class="style-image" type="button" data-src="{src}" aria-label="View {label}">'
+                  f'<img src="{src}" alt="{label} — Curly and wavy hairstyle reference" loading="lazy" decoding="async">'
+                  f'<span class="image-open">VIEW <b>↗</b></span></button>'
+                  f'<div class="style-info"><div><h4>{label}</h4><p>Curly and wavy hairstyle reference</p></div><span>↗</span></div></article>')
+              image_count += 1
+
+          def insert_before_grid_close(page, grid_id, cards_html):
+              if not cards_html:
+                  return page
+              start = page.index('id="' + grid_id + '"')
+              marker = '<p id="no-results"'
+              if grid_id == "beard-grid":
+                  # Beard grid ends before the enclosing beard section closes.
+                  end = page.index('</div></section>', start)
+                  close = page.rfind('</div>', start, end)
+              else:
+                  no_results = page.index(marker, start)
+                  close = page.rfind('</div>', start, no_results)
+              if close < start:
+                  raise SystemExit("Cannot find closing tag for " + grid_id)
+              return page[:close] + "\\n" + "\\n".join(cards_html) + "\\n" + page[close:]
+
+          page = insert_before_grid_close(page, "hair-grid", cards["hair"])
+          page = insert_before_grid_close(page, "beard-grid", cards["beard"])
+          page_path.write_text(page, encoding="utf-8")
+          print(f"Published {image_count} additional catalogue images: {len(cards['hair'])} hair and {len(cards['beard'])} beard.")
+          PY
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
