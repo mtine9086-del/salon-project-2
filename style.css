@@ -212,3 +212,64 @@ body{background:var(--color-bg-canvas);color:var(--color-text-primary);font-fami
 .viewer-zoom-controls button:disabled{opacity:.65;cursor:default;font-size:12px}
 #viewer-image{transform-origin:center center;transition:transform .12s ease;touch-action:none}
 @media(max-width:520px){.viewer-zoom-controls{top:10px;gap:2px}.viewer-zoom-controls button{min-width:40px;min-height:40px}}
+
+
+/* 2026-11-04 catalogue layout repair: prevent cards collapsing into narrow columns */
+#hair-grid.style-grid,
+#beard-grid.style-grid,
+.style-grid {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)) !important;
+  grid-auto-flow: row !important;
+  grid-auto-columns: auto !important;
+  align-items: start !important;
+  gap: 22px !important;
+}
+.style-grid > .style-card {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+.style-grid .style-image {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  aspect-ratio: 4 / 5 !important;
+}
+.style-grid .style-image img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+.style-grid .style-info,
+.style-grid .style-info > div {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+.style-grid .style-info h4 {
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+}
+.style-grid .style-info p {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+}
+@media (max-width: 600px) {
+  #hair-grid.style-grid,
+  #beard-grid.style-grid,
+  .style-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+  .style-grid .style-info h4 { font-size: 13px !important; }
+  .style-grid .style-info p { font-size: 11px !important; }
+}
