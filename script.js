@@ -9,7 +9,7 @@ const noResults=document.getElementById("no-results"),count=document.getElementB
 const clear=document.getElementById("clear-search"),showAll=document.getElementById("show-all");
 const dialog=document.getElementById("image-viewer"),image=document.getElementById("viewer-image"),caption=document.getElementById("viewer-caption");
 const close=document.getElementById("viewer-close"),prev=document.getElementById("viewer-prev"),next=document.getElementById("viewer-next"),barber=document.getElementById("barber-mode");
-const PAGE_SIZE=24;
+const PAGE_SIZE=Number.MAX_SAFE_INTEGER;
 let zoomLevel=1,panX=0,panY=0,dragging=false,dragStartX=0,dragStartY=0,dragOriginX=0,dragOriginY=0;
 const zoomControls=document.createElement("div");
 zoomControls.className="viewer-zoom-controls";
