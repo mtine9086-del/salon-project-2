@@ -327,17 +327,8 @@ jobs:
               raise SystemExit("Cannot insert catalogue layout guard: </head> missing")
           page = page.replace("</head>", layout_guard + "\\n</head>", 1)
 
-          # Guard against cards being nested inside another card instead of the grid.
-          for grid_id in ("hair-grid", "beard-grid"):
-              grid_start = page.index('id="' + grid_id + '"')
-              grid_open_end = page.index(">", grid_start) + 1
-              grid_close = page.index("</div>", grid_open_end)
-              grid_html = page[grid_open_end:grid_close]
-              if "<article" not in grid_html:
-                  raise SystemExit("No direct catalogue cards found in " + grid_id)
-              if "</article>" not in grid_html:
-                  raise SystemExit("Unclosed catalogue card in " + grid_id)
-
+          # Do not use a naive first-</div> check here: card markup contains
+          # nested divs. Grid insertion points are already verified above.
           page_path.write_text(page, encoding="utf-8")
           print(f"Published {image_count} additional catalogue images: {len(cards['hair'])} hair and {len(cards['beard'])} beard.")
           PY
