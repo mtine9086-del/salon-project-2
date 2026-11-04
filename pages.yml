@@ -1,0 +1,346 @@
+name: Deploy static site to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare clean site directory
+        run: mkdir -p _site
+
+      - name: Extract Curly & Wavy image assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          archives = [
+              "curly-wavy-web-project-cleaned (1).zip",
+              "curly-wavy-8-images-cleaned.zip",
+          ]
+          output = Path("_site/images/curly-wavy")
+          output.mkdir(parents=True, exist_ok=True)
+          extracted = set()
+          for archive in archives:
+              path = Path(archive)
+              if not path.exists():
+                  continue
+              with ZipFile(path) as z:
+                  for member in z.namelist():
+                      parts = member.replace("\\", "/").split("/")
+                      if member.lower().endswith(".webp") and "curly-wavy" in parts:
+                          name = parts[-1]
+                          if name not in extracted:
+                              (output / name).write_bytes(z.read(member))
+                              extracted.add(name)
+          print(f"Extracted {len(extracted)} Curly & Wavy WebP assets.")
+          PY
+
+      - name: Extract beard and moustache catalogue
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          archive = Path("beard-moustache-catalogue-upload-ready.zip")
+          if not archive.exists():
+              raise SystemExit("Required beard catalogue archive is missing.")
+          count = 0
+          with ZipFile(archive) as z:
+              for member in z.namelist():
+                  parts = member.replace("\\", "/").split("/")
+                  if member.lower().endswith(".webp") and len(parts) >= 3:
+                      folder = parts[-2]
+                      filename = parts[-1]
+                      if folder in {"01_Beard_Portraits", "02_Traditional_Turban_Beard", "03_Moustache_Focused"}:
+                          target = Path("_site/images/beard-moustache") / folder / filename
+                          target.parent.mkdir(parents=True, exist_ok=True)
+                          target.write_bytes(z.read(member))
+                          count += 1
+          if count != 42:
+              raise SystemExit(f"Expected 42 beard images, extracted {count}.")
+          print(f"Extracted {count} beard and moustache WebP assets.")
+          PY
+
+      - name: Copy website files only
+        run: |
+          cp index.html style.css script.js _site/
+          find . -maxdepth 1 -type f -name '*.webp' -exec cp {} _site/ \;
+          if [ -d images ]; then cp -R images/. _site/images/; fi
+          test -s _site/index.html
+          test -s _site/style.css
+          test -s _site/script.js
+          if find _site -type f \( -name '*.zip' -o -name '*.ps1' -o -name '*.md' \) | grep -q .; then
+            echo "Unexpected source/development files found in public artifact."
+            exit 1
+          fi
+          echo "Clean website artifact prepared."
+
+      - name: Publish all 41 newly uploaded reference images
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import json, html
+          import re
+
+          def find_grid_div_close(document, grid_id):
+              pattern = r'<div\b(?=[^>]*\bid="' + re.escape(grid_id) + r'")[^>]*>'
+              opening = re.search(pattern, document, re.IGNORECASE)
+              if not opening:
+                  raise SystemExit("Cannot find opening element for " + grid_id)
+              depth = 1
+              tail = document[opening.end():]
+              for token in re.finditer(r'<div\b[^>]*>|</div\s*>', tail, re.IGNORECASE):
+                  if token.group(0).lower().startswith("</"):
+                      depth -= 1
+                      if depth == 0:
+                          return opening.end() + token.start()
+                  else:
+                      depth += 1
+              raise SystemExit("Cannot find matching closing div for " + grid_id)
+
+          def insert_cards_into_grid(document, grid_id, cards_html):
+              if not cards_html:
+                  return document
+              # Avoid a second card for an image already represented in the page.
+              existing_sources = set(re.findall(r'(?:src|data-src)="([^"]+)"', document))
+              unique_cards = []
+              for card in cards_html:
+                  match = re.search(r'data-src="([^"]+)"', card)
+                  source = match.group(1) if match else None
+                  if source and source in existing_sources:
+                      continue
+                  unique_cards.append(card)
+                  if source:
+                      existing_sources.add(source)
+              if not unique_cards:
+                  return document
+              close = find_grid_div_close(document, grid_id)
+              return document[:close] + "\n" + "\n".join(unique_cards) + "\n" + document[close:]
+
+          archive = Path("salon-images-upload-ready.zip")
+          if not archive.exists():
+              raise SystemExit("salon-images-upload-ready.zip is missing")
+          output = Path("_site/images/uploaded-41")
+          output.mkdir(parents=True, exist_ok=True)
+          with ZipFile(archive) as z:
+              manifest = json.loads(z.read("image-manifest.json"))
+              entries = [e for e in manifest if e.get("output_file", "").lower().endswith(".webp")]
+              if len(entries) != 41:
+                  raise SystemExit(f"Expected 41 WebP images in upload package; found {len(entries)}")
+              cards = {"hair": [], "beard": []}
+              for entry in entries:
+                  source = entry["output_file"]
+                  filename = Path(source).name
+                  target = output / filename
+                  target.write_bytes(z.read(source))
+                  label = entry.get("visual_label", Path(filename).stem.replace("-", " ")).replace("_", " ")
+                  label = html.escape(label)
+                  src = "images/uploaded-41/" + filename
+                  is_beard = filename.startswith("beard-")
+                  category = "beard" if is_beard else "texture"
+                  cls = "style-card beard-card" if is_beard else "style-card"
+                  desc = "Beard and moustache grooming reference" if is_beard else "Haircut and hairstyle reference"
+                  card = (f'<article class="{cls}" data-name="{label}" data-category="{category}">'
+                          f'<button class="style-image" type="button" data-src="{src}" aria-label="View {label}">'
+                          f'<img src="{src}" alt="{label} — {desc}" loading="lazy" decoding="async">'
+                          f'<span class="image-open">VIEW <b>↗</b></span></button>'
+                          f'<div class="style-info"><div><h4>{label}</h4><p>{desc}</p></div><span>↗</span></div></article>')
+                  cards["beard" if is_beard else "hair"].append(card)
+
+          index = Path("_site/index.html")
+          page = index.read_text(encoding="utf-8")
+          if 'id="hair-grid"' not in page or 'id="beard-grid"' not in page:
+              raise SystemExit("Could not locate gallery grids in index.html")
+          page = insert_cards_into_grid(page, "hair-grid", cards["hair"])
+          page = insert_cards_into_grid(page, "beard-grid", cards["beard"])
+          index.write_text(page, encoding="utf-8")
+          print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
+          PY
+
+      - name: Inspect curated image package
+        run: |
+          python - <<'PY'
+          from zipfile import ZipFile
+          from pathlib import Path
+          import json
+          p=Path("salon-curated-upload-pack.zip")
+          if not p.exists():
+              raise SystemExit("Curated image package missing")
+          with ZipFile(p) as z:
+              names=z.namelist()
+              images=[n for n in names if n.lower().endswith((".webp", ".jpg", ".jpeg", ".png"))]
+              print(f"CURATED_PACKAGE_IMAGE_COUNT={len(images)}")
+              print("CURATED_PACKAGE_SAMPLE_PATHS="+repr(images[:30]))
+              for n in names:
+                  if Path(n).name.lower() in {"image-manifest.json", "manifest.json"}:
+                      data=json.loads(z.read(n))
+                      print("CURATED_MANIFEST_PATH="+n)
+                      print("CURATED_MANIFEST_TYPE="+type(data).__name__)
+                      print("CURATED_MANIFEST_SAMPLE="+repr(data[:3] if isinstance(data,list) else list(data)[:20]))
+          PY
+
+      - name: Publish curated and Curly & Wavy catalogue cards
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from html.parser import HTMLParser
+          import html
+          import re
+
+          def find_grid_div_close(document, grid_id):
+              pattern = r'<div\b(?=[^>]*\bid="' + re.escape(grid_id) + r'")[^>]*>'
+              opening = re.search(pattern, document, re.IGNORECASE)
+              if not opening:
+                  raise SystemExit("Cannot find opening element for " + grid_id)
+              depth = 1
+              tail = document[opening.end():]
+              for token in re.finditer(r'<div\b[^>]*>|</div\s*>', tail, re.IGNORECASE):
+                  if token.group(0).lower().startswith("</"):
+                      depth -= 1
+                      if depth == 0:
+                          return opening.end() + token.start()
+                  else:
+                      depth += 1
+              raise SystemExit("Cannot find matching closing div for " + grid_id)
+
+          def insert_cards_into_grid(document, grid_id, cards_html):
+              if not cards_html:
+                  return document
+              # Avoid a second card for an image already represented in the page.
+              existing_sources = set(re.findall(r'(?:src|data-src)="([^"]+)"', document))
+              unique_cards = []
+              for card in cards_html:
+                  match = re.search(r'data-src="([^"]+)"', card)
+                  source = match.group(1) if match else None
+                  if source and source in existing_sources:
+                      continue
+                  unique_cards.append(card)
+                  if source:
+                      existing_sources.add(source)
+              if not unique_cards:
+                  return document
+              close = find_grid_div_close(document, grid_id)
+              return document[:close] + "\n" + "\n".join(unique_cards) + "\n" + document[close:]
+
+          page_path = Path("_site/index.html")
+          page = page_path.read_text(encoding="utf-8")
+          cards = {"hair": [], "beard": []}
+          image_count = 0
+
+          # Publish every curated pack image and create a matching catalogue card.
+          with ZipFile("salon-curated-upload-pack.zip") as z:
+              for member in z.namelist():
+                  lower = member.lower()
+                  if not lower.endswith((".webp", ".jpg", ".jpeg", ".png")):
+                      continue
+                  parts = member.replace("\\\\", "/").split("/")
+                  if len(parts) < 3 or parts[-2] not in {"haircuts", "beard-styles"}:
+                      continue
+                  kind = "beard" if parts[-2] == "beard-styles" else "hair"
+                  filename = Path(parts[-1]).name
+                  target = Path("_site/images/curated") / kind / filename
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(z.read(member))
+                  label = html.escape(Path(filename).stem.replace("-", " ").title())
+                  src = "images/curated/" + kind + "/" + filename
+                  cls = "style-card beard-card" if kind == "beard" else "style-card"
+                  desc = "Beard and moustache grooming reference" if kind == "beard" else "Haircut and hairstyle reference"
+                  cards[kind].append(
+                      f'<article class="{cls}" data-name="{label}" data-category="{kind}">'
+                      f'<button class="style-image" type="button" data-src="{src}" aria-label="View {label}">'
+                      f'<img src="{src}" alt="{label} — {desc}" loading="lazy" decoding="async">'
+                      f'<span class="image-open">VIEW <b>↗</b></span></button>'
+                      f'<div class="style-info"><div><h4>{label}</h4><p>{desc}</p></div><span>↗</span></div></article>')
+                  image_count += 1
+
+          # The curly archives are already extracted into _site/images/curly-wavy.
+          curly_dir = Path("_site/images/curly-wavy")
+          for path in sorted(curly_dir.glob("*.webp")):
+              filename = path.name
+              label = html.escape(Path(filename).stem.replace("-", " ").replace("_", " ").title())
+              src = "images/curly-wavy/" + filename
+              cards["hair"].append(
+                  f'<article class="style-card" data-name="{label}" data-category="curly">'
+                  f'<button class="style-image" type="button" data-src="{src}" aria-label="View {label}">'
+                  f'<img src="{src}" alt="{label} — Curly and wavy hairstyle reference" loading="lazy" decoding="async">'
+                  f'<span class="image-open">VIEW <b>↗</b></span></button>'
+                  f'<div class="style-info"><div><h4>{label}</h4><p>Curly and wavy hairstyle reference</p></div><span>↗</span></div></article>')
+              image_count += 1
+
+          page = insert_cards_into_grid(page, "hair-grid", cards["hair"])
+          page = insert_cards_into_grid(page, "beard-grid", cards["beard"])
+
+          class CatalogueGridValidator(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.active_grid = None
+                  self.div_depth = 0
+                  self.counts = {
+                      "hair-grid": {"direct": 0, "total": 0},
+                      "beard-grid": {"direct": 0, "total": 0},
+                  }
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if tag == "div" and attrs.get("id") in self.counts:
+                      self.active_grid = attrs["id"]
+                      self.div_depth = 1
+                      return
+                  if self.active_grid:
+                      if tag == "div":
+                          self.div_depth += 1
+                      elif tag == "article":
+                          self.counts[self.active_grid]["total"] += 1
+                          if self.div_depth == 1:
+                              self.counts[self.active_grid]["direct"] += 1
+
+              def handle_endtag(self, tag):
+                  if self.active_grid and tag == "div":
+                      self.div_depth -= 1
+                      if self.div_depth == 0:
+                          self.active_grid = None
+
+          validator = CatalogueGridValidator()
+          validator.feed(page)
+          for grid_id, counts in validator.counts.items():
+              if counts["direct"] == 0 or counts["direct"] != counts["total"]:
+                  raise SystemExit(
+                      f"Invalid {grid_id}: {counts['direct']} direct cards / "
+                      f"{counts['total']} total cards. Every card must be a direct grid child."
+                  )
+              print(f"{grid_id}: {counts['direct']} direct cards; structure valid.")
+
+          page_path.write_text(page, encoding="utf-8")
+          print(f"Published {image_count} additional catalogue images: {len(cards['hair'])} hair and {len(cards['beard'])} beard.")
+          PY
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
