@@ -148,6 +148,28 @@ jobs:
           print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
           PY
 
+      - name: Inspect curated image package
+        run: |
+          python - <<'PY'
+          from zipfile import ZipFile
+          from pathlib import Path
+          import json
+          p=Path("salon-curated-upload-pack.zip")
+          if not p.exists():
+              raise SystemExit("Curated image package missing")
+          with ZipFile(p) as z:
+              names=z.namelist()
+              images=[n for n in names if n.lower().endswith((".webp", ".jpg", ".jpeg", ".png"))]
+              print(f"CURATED_PACKAGE_IMAGE_COUNT={len(images)}")
+              print("CURATED_PACKAGE_SAMPLE_PATHS="+repr(images[:30]))
+              for n in names:
+                  if Path(n).name.lower() in {"image-manifest.json", "manifest.json"}:
+                      data=json.loads(z.read(n))
+                      print("CURATED_MANIFEST_PATH="+n)
+                      print("CURATED_MANIFEST_TYPE="+type(data).__name__)
+                      print("CURATED_MANIFEST_SAMPLE="+repr(data[:3] if isinstance(data,list) else list(data)[:20]))
+          PY
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
