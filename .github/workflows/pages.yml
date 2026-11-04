@@ -155,7 +155,7 @@ jobs:
           for grid_id, batch in (("hair-grid", cards["hair"]), ("beard-grid", cards["beard"])):
               if batch:
                   close = find_div_close(page, grid_id)
-                  page = page[:close] + "\n" + "\\n".join(batch) + "\n" + page[close:]
+                  page = page[:close] + "\n" + "\n".join(batch) + "\n" + page[close:]
           index.write_text(page, encoding="utf-8")
           print(f'Published {len(entries)} images: {len(cards["hair"])} hairstyle/editorial and {len(cards["beard"])} beard references.')
           PY
@@ -254,7 +254,7 @@ jobs:
               if not cards_html:
                   return page
               close = find_div_close(page, grid_id)
-              return page[:close] + "\n" + "\\n".join(cards_html) + "\n" + page[close:]
+              return page[:close] + "\n" + "\n".join(cards_html) + "\n" + page[close:]
 
           page = insert_before_grid_close(page, "hair-grid", cards["hair"])
           page = insert_before_grid_close(page, "beard-grid", cards["beard"])
